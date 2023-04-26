@@ -1,15 +1,51 @@
-#include <netinet/in.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/select.h>
-#include <unistd.h>
+#include "03_redis.hpp"
 
-void err_exit(const char* str)
+static int32_t query(int fd, const char *text)
 {
-    write(2, str, strlen(str));
-	exit(1) ;
+    uint32_t len = (uint32_t) strlen(text);
+
+    if (len > k_max_msg)
+        return (-1);
+    
+    char wbuf[4 + k_max_msg];
+    memcpy(wbuf, &len, 4);
+    memcpy(&wbuf[4], &len, 4);
+    
+    if (int32_t err = write_all(fd, wbuf, 4 + len))
+        return err;
+    
+    // 4 byte header 
+    char rbuff[4 + k_max_msg + 1];
+    errno = 0;
+    int32_t err = read_full(fd, rbuff, 4);
+    if (err)
+    {
+        if (errno == 0)
+            msg("EOF");
+        else 
+            msg("read() error");
+        return err;
+    }
+
+    memcpy(&len, rbuff, 4); 
+    if (len > k_max_msg)
+    {
+        msg("too long");
+        return -1;
+    }
+
+    // reply body
+    err = read_full(fd, &rbuff[4], len);
+    if (err)
+    {
+        msg("read() error");
+        return err;
+    }
+
+    // Do something 
+    rbuff[4 + len] = '\0';
+    printf("server says: %s\n", &rbuff[4]);
+    return (0);
 }
 
 int main()
