@@ -66,6 +66,19 @@ int main()
     char msg[] = "hello";
     write(fd, msg, strlen(msg));
 
+    // int32_t err = query(fd, "hello1");
+    // if (err) {
+    //     return -1;
+    // }
+    // err = query(fd, "hello2");
+    // if (err) {
+    //    return -1;
+    // }
+    // err = query(fd, "hello3");
+    // if (err) {
+    //   return -1;
+    // }
+
     char rbuf[64] = {};
 	ssize_t n = read(fd, rbuf, sizeof(rbuf) - 1);
     if (n < 0) {
