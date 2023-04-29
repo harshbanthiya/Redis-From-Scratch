@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <vector>
+#include <map>
+#include <string>
 
 const size_t k_max_msg = 4096;
 
@@ -19,6 +21,15 @@ enum {
     STATE_RES = 1,
     STATE_END = 2,  // mark the connection for deletion
 };
+
+enum {
+    RES_OK = 0,
+    RES_ERR = 1,
+    RES_NX = 2,
+};  
+
+static std::map<std::string, std::string> g_map; // Replace with hashtable later 
+const size_t k_max_args = 1024;
 
 struct Conn {
     int fd = -1;
