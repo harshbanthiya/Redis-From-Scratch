@@ -1,4 +1,4 @@
-server: server.cpp header_and_utils.hpp
+server: server.cpp header_and_utils.hpp hashtable.cpp hashtable.hpp
 	g++ -std=c++11 -Wall -Wextra -O2 -g server.cpp -o server
 
 client: client.cpp header_and_utils.hpp
