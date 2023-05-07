@@ -14,19 +14,25 @@ make server ; make client
 
 **Open two terminal windows and run both programs**
 ```sh
-./client get k
-server says: [2]
+./client asdf
+(err) 1 Unknown cmd
+./client get asdf
+(nil)
 ./client set k v
-server says: [0]
+(nil)
 ./client get k
-server says: [0] v
+(str) v
+./client keys
+(arr) len=1
+(str) k
+(arr) end
 ./client del k
-server says: [0]
-./client get k
-server says: [2]
-./client aaa bbb
-server says: [1] Unknown cmd
-
+(int) 1
+./client del k
+(int) 0
+./client keys
+(arr) len=0
+(arr) end
 ```
 ```sh
 ./server
