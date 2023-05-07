@@ -40,3 +40,9 @@ make server ; make client
 (arr) end
 ```
 
+
+## TO DO
+
+General clean and separation of code into specific headers and keeping about 5-6 functions only per file.
+
+Implementing AVL tree based sorted set data structure for achieving - the default Redis ability to sort your data in order, and to support the unique feature of querying ordered data by rank.
