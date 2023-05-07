@@ -1,4 +1,26 @@
-#include "header_and_utils.hpp"
+#include <assert.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <errno.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/ip.h>
+#include <string>
+#include <vector>
+
+
+static void msg(const char *msg) {
+    fprintf(stderr, "%s\n", msg);
+}
+
+static void die(const char *msg) {
+    int err = errno;
+    fprintf(stderr, "[%d] %s\n", err, msg);
+    abort();
+}
 
 static int32_t read_full(int fd, char *buf, size_t n) {
     while (n > 0) {
@@ -26,14 +48,13 @@ static int32_t write_all(int fd, const char *buf, size_t n) {
     return 0;
 }
 
+const size_t k_max_msg = 4096;
 
-// the `query` function was simply splited into `send_req` and `read_res`.
-static int32_t send_req(int fd, const std::vector<std::string> &cmd) 
-{
+static int32_t send_req(int fd, const std::vector<std::string> &cmd) {
     uint32_t len = 4;
-    for (const std::string &s : cmd) 
+    for (const std::string &s : cmd) {
         len += 4 + s.size();
-    
+    }
     if (len > k_max_msg) {
         return -1;
     }
@@ -52,8 +73,7 @@ static int32_t send_req(int fd, const std::vector<std::string> &cmd)
     return write_all(fd, wbuf, 4 + len);
 }
 
-static int32_t read_res(int fd) 
-{
+static int32_t read_res(int fd) {
     // 4 bytes header
     char rbuf[4 + k_max_msg + 1];
     errno = 0;
@@ -92,8 +112,7 @@ static int32_t read_res(int fd)
     return 0;
 }
 
-int main(int argc, char **argv) 
-{
+int main(int argc, char **argv) {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd < 0) {
         die("socket()");
@@ -121,7 +140,7 @@ int main(int argc, char **argv)
         goto L_DONE;
     }
 
-    L_DONE:
-        close(fd);
+L_DONE:
+    close(fd);
     return 0;
 }

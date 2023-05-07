@@ -1,8 +1,11 @@
-server: server.cpp header_and_utils.hpp
-	g++ -std=c++11 -Wall -Wextra -O2 -g server.cpp -o server
+CC=g++
+CFLAGS=-std=c++11 -Wall -Wextra -O2 -g
 
-client: client.cpp header_and_utils.hpp
-	g++ -std=c++11 -Wall -Wextra -O2 -g client.cpp -o client
+server: server.cpp hashtable.cpp hashtable.h
+	g++ -std=c++11 -Wall -Wextra -O2 -g server.cpp hashtable.cpp -o server
+
+client: client.cpp
+	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	rm -rf server client 
+	rm -rf server client
