@@ -13,6 +13,11 @@ make server ; make client
 ```
 
 **Open two terminal windows and run both programs**
+
+```sh
+./server
+```
+
 ```sh
 ./client asdf
 (err) 1 Unknown cmd
@@ -34,6 +39,4 @@ make server ; make client
 (arr) len=0
 (arr) end
 ```
-```sh
-./server
-```
+
