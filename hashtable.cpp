@@ -129,6 +129,10 @@ HNode *hm_pop(
     return NULL;
 }
 
+size_t hm_size(HMap *hmap) {
+    return hmap->ht1.size + hmap->ht2.size;
+}
+
 void hm_destroy(HMap *hmap) {
     assert(hmap->ht1.size + hmap->ht2.size == 0);
     free(hmap->ht1.tab);
